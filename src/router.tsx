@@ -20,7 +20,7 @@ const AboutRoute = createRoute({
     component: About,
 });
 
-const MovieDetailsRoute = createRoute({
+export const MovieDetailsRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: '/$movieId',
     component: MovieDetails,

@@ -13,7 +13,7 @@ body {
   text-align: center;
 }
 
-figure, blockquote, dl, dd {
+figure, blockquote, dl, dd, p {
   margin: 0;
   padding: 0;
 }
