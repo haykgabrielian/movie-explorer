@@ -3,8 +3,10 @@ import styled from 'styled-components';
 
 import Search from '@/components/Search';
 import Menu from '@/components/Menu';
+import ThemeSwitch from '@/components/ThemeSwitch';
+import { ThemeType } from '@/helpers/themes';
 
-const HeaderWrapper = styled.header`
+const HeaderWrapper = styled.header<{ theme: ThemeType }>`
     position: fixed;
     top: 0;
     right: 0;
@@ -14,7 +16,7 @@ const HeaderWrapper = styled.header`
     height: 70px;
     width: 100%;
     padding: 0 33px;
-    background-color: #333;
+    background-color: ${({ theme }) => theme.headerBackground};
     color: white;
     text-align: center;
     z-index: 1;
@@ -32,6 +34,7 @@ const Header = ({ query, handleSearchChange, handleSearchClear, handleSidebarTog
     return (
         <HeaderWrapper>
             <Menu open={menuOpen} handleSidebarToggle={handleSidebarToggle}/>
+            <ThemeSwitch />
             <Search query={query} onChange={handleSearchChange} onClear={handleSearchClear} />
         </HeaderWrapper>
     );

@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { ThemeType } from '@/helpers/themes';
+
 const Container = styled.div`
     position: relative;
     width: 40px;
@@ -10,12 +12,12 @@ const Container = styled.div`
     z-index: 9999;
 `;
 
-const MenuItem = styled.div<{ open: boolean }>`
+const MenuItem = styled.div<{ open: boolean, theme: ThemeType }>`
     position: absolute;
     display: block;
     width: 100%;
     height: 2px;
-    background-color: #fff;
+    background-color: ${({ theme }) => theme.text};
     transition-duration: 0.3s, 0.3s;
 
     &:nth-child(1) {

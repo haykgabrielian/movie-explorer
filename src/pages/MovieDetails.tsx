@@ -8,6 +8,7 @@ import { getPosterUrl } from '@/helpers/imageHelpers';
 
 import RightArrowIcon from '@/assets/right.png';
 import LeftArrowIcon from '@/assets/left.png';
+import { ThemeType } from '@/helpers/themes';
 
 const Container = styled.div`
     padding-top: 70px;
@@ -54,11 +55,20 @@ const Section = styled.div`
     text-align: left;
 `;
 
-const SectionTitle = styled.h3`
+const SectionTitle = styled.h3<{ theme: ThemeType }>`
+    color: ${({ theme }) => theme.titleText};
     margin-bottom: 7px;
 `;
 
-const CastList = styled.div`
+const SectionDetails = styled.p<{ theme: ThemeType }>`
+    color: ${({ theme }) => theme.text};
+`;
+
+const MovieTitle = styled.h1<{ theme: ThemeType }>`
+    color: ${({ theme }) => theme.titleText};
+`;
+
+const CastList = styled.div<{ theme: ThemeType }>`
     display: flex;
     flex-wrap: wrap;
     gap: 25px;
@@ -70,15 +80,16 @@ const CastCard = styled.div`
     align-items: flex-start;
 `;
 
-const ActorName = styled.p`
+const ActorName = styled.p<{ theme: ThemeType }>`
     font-weight: bold;
     font-size: 14px;
+    color: ${({ theme }) => theme.titleText};
 `;
 
-const CharacterName = styled.p`
+const CharacterName = styled.p<{ theme: ThemeType }>`
     margin-top: 5px;
     font-size: 14px;
-    color: #aaa;
+    color: ${({ theme }) => theme.text};
 `;
 
 const TrailerSlider = styled.div`
@@ -88,24 +99,17 @@ const TrailerSlider = styled.div`
     gap: 20px;
 `;
 
-const ArrowButton = styled.button<{ direction: 'left' | 'right' }>`
+const ArrowButton = styled.button<{ direction: 'left' | 'right', theme: ThemeType }>`
     position: relative;
     height: 40px;
     width: 40px;
-    padding: 0;
-    background-color: #777;
-    border-radius: 50%;
     cursor: pointer;
     overflow: hidden;
     background-image: ${({direction}) =>
             direction === 'left' ? `url(${LeftArrowIcon})` : `url(${RightArrowIcon})`};
-    background-size: 18px auto;
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-
-    &:hover {
-        background-color: #666;
-    }
 `;
 
 const VideoWrapper = styled.div`
@@ -114,16 +118,17 @@ const VideoWrapper = styled.div`
     align-items: center;
 `;
 
-const TrailerTitle = styled.p`
+const TrailerTitle = styled.p<{ theme: ThemeType }>`
     margin-top: 10px;
     font-size: 14px;
-    color: #aaa;
+    color: ${({ theme }) => theme.text};
 `;
 
-const StyledLink = styled(Link)`
+const StyledBackLink = styled(Link)<{ theme: ThemeType }>`
     position: absolute;
     top: 20px;
     left: 20px;
+    color: ${({ theme }) => theme.text};
 `;
 
 
@@ -149,17 +154,17 @@ const MovieDetails = () => {
 
     return (
         <Container>
-            <StyledLink to="/">Back</StyledLink>
+            <StyledBackLink to="/">Back</StyledBackLink>
             {isLoading ? <p>Loading movie details...</p> :
                 <Details>
                     <ImageContainer>
                         <img src={getPosterUrl(movie.poster_path)} alt={movie.title} />
                     </ImageContainer>
                     <DetailsContainer>
-                        <h1>{movie.title}</h1>
+                        <MovieTitle>{movie.title}</MovieTitle>
                         <Section>
                             <SectionTitle>Overview:</SectionTitle>
-                            <p>{movie.overview}</p>
+                            <SectionDetails>{movie.overview}</SectionDetails>
                         </Section>
                         <Section>
                             <SectionTitle>Genres:</SectionTitle>
@@ -173,7 +178,7 @@ const MovieDetails = () => {
                         </Section>
                         <Section>
                             <SectionTitle>Release Date:</SectionTitle>
-                            <p>{movie.release_date}</p>
+                            <SectionDetails>{movie.release_date}</SectionDetails>
                         </Section>
                         {credits?.cast != null && credits?.cast.length > 0 && (
                             <Section>

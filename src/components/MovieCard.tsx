@@ -5,6 +5,7 @@ import { Link } from '@tanstack/react-router';
 import { MovieDetailsRoute } from '@/routes';
 import { getPosterUrl } from '@/helpers/imageHelpers';
 import { Movie } from '@/types/movie';
+import { ThemeType } from '@/helpers/themes';
 
 const MovieItem = styled.div`
     position: relative;
@@ -16,11 +17,11 @@ const Poster = styled.img`
     width: 100%;
 `;
 
-const MovieInfo = styled.span`
+const MovieInfo = styled.span<{ theme: ThemeType }>`
     display: flex;
     flex-direction: column;
     width: 100%;
-    color: #cccccc;
+    color: ${({ theme }) => theme.text};
 `;
 
 const MovieTitle = styled.span`
@@ -42,7 +43,7 @@ const Title = styled.h2`
 
 const VoteAverage = styled.p`
     margin-left: 10px;
-    color: yellow;
+    color: #f0de24;
 `;
 
 const FavoriteButton = styled.button`

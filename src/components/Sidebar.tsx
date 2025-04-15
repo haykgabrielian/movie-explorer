@@ -3,16 +3,17 @@ import styled from 'styled-components';
 
 import { useGenres } from '@/hooks/useGanres';
 import { Genre } from '@/types/movie';
+import { ThemeType } from '@/helpers/themes';
 
-const Container = styled.div<{ sidebarOpen: boolean }>`
+const Container = styled.div<{ sidebarOpen: boolean,  theme: ThemeType }>`
     position: fixed;
     top: 70px;
     left: 0;
     height: 100%;
     width: 400px;
     padding: 20px;
-    background-color: #333;
-    color: #fff;
+    background-color: ${({ theme }) => theme.sidebarBackground};
+    color: ${({ theme }) => theme.titleText};
     z-index: 1000;
     transform: ${({ sidebarOpen }) => sidebarOpen ? 'translateX(0)' : 'translateX(-100%)'};
     transition: transform 0.3s ease-in-out;
@@ -52,10 +53,10 @@ const GenreItem = styled.div<{ isSelected: boolean }>`
     }
 `;
 
-const ClearButton = styled.div`
+const ClearButton = styled.div<{ theme: ThemeType }>`
     margin-top: 20px;
     padding: 10px;
-    color: #fff;
+    color: ${({ theme }) => theme.titleText};
     border: none;
     cursor: pointer;
     border-radius: 5px;
