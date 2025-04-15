@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from '@tanstack/react-router';
-import { MovieDetailsRoute } from '@/router';
+
+import { MovieDetailsRoute } from '@/routes';
 import { getPosterUrl } from '@/helpers/imageHelpers';
 import { Movie } from '@/types/movie';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Search from "@/components/Search";
-import Menu from "@/components/Menu";
+import Search from '@/components/Search';
+import Menu from '@/components/Menu';
 
 const HeaderWrapper = styled.header`
     position: fixed;

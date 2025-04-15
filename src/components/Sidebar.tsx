@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useGenres } from "@/hooks/useGanres";
-import { Genre } from "@/types/movie";
+
+import { useGenres } from '@/hooks/useGanres';
+import { Genre } from '@/types/movie';
 
 const Container = styled.div<{ sidebarOpen: boolean }>`
     position: fixed;

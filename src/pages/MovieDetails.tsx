@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import styled from "styled-components";
+import styled from 'styled-components';
 import {Link, useParams} from '@tanstack/react-router';
 
-import { MovieDetailsRoute } from '@/router';
+import { MovieDetailsRoute } from '@/routes';
 import { useMovieDetails } from '@/hooks/useMovieDetails';
 import { getPosterUrl } from '@/helpers/imageHelpers';
 

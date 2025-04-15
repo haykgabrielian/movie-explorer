@@ -1,13 +1,12 @@
-import React, {useEffect, useState, useCallback } from 'react';
-import styled from "styled-components";
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import styled from 'styled-components';
 
-import Header from "@/components/Header";
+import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
 import MovieCard from '@/components/MovieCard';
 
 import { useMovies } from '@/hooks/useMovies';
 import { Movie } from '@/types/movie';
-
 
 const Container = styled.div`
     padding: 70px 0;
@@ -31,7 +30,10 @@ const Home = () => {
     const [query, setQuery] = useState("");
     const [debouncedQuery, setDebouncedQuery] = useState("");
 
-    const { data, isLoading, error } = useMovies(debouncedQuery, 1, selectedGenres);
+    const [page, setPage] = useState(1);
+    const [allMovies, setAllMovies] = useState<Movie[]>([]);
+
+    const { data, isLoading, isFetching, error } = useMovies(debouncedQuery, page, selectedGenres);
 
     useEffect(() => {
         const storedIds = localStorage.getItem("favoriteMovieIds");
@@ -41,13 +43,58 @@ const Home = () => {
     }, []);
 
     useEffect(() => {
-        if (query !== debouncedQuery) {
-            const handler = setTimeout(() => {
-                setDebouncedQuery(query);
-            }, 800);
-            return () => clearTimeout(handler);
+        const handler = setTimeout(() => {
+            setDebouncedQuery(query);
+        }, 800);
+        return () => clearTimeout(handler);
+    }, [query]);
+
+    useEffect(() => {
+        setPage(1);
+        setAllMovies([]);
+    }, [debouncedQuery, selectedGenres.length]);
+
+    const prevPageRef = useRef<number>(page);
+
+    useEffect(() => {
+        if (!data?.results) return;
+
+        const prevPage = prevPageRef.current;
+
+        if (page > prevPage) {
+            setAllMovies(prev => [...prev, ...data.results]);
         }
-    }, [query, debouncedQuery]);
+
+        if (page === 1) {
+            setAllMovies(data.results);
+        }
+
+        prevPageRef.current = page;
+    }, [data, page]);
+
+    useEffect(() => {
+        let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+        const handleScroll = () => {
+            if (timeoutId || data?.total_pages === page) return;
+
+            timeoutId = setTimeout(() => {
+                const scrollTop = window.scrollY;
+                const windowHeight = window.innerHeight;
+                const fullHeight = document.body.offsetHeight;
+
+                if (scrollTop + windowHeight >= fullHeight - 400 && !isFetching) {
+                    setPage(prev => prev + 1);
+                }
+
+                timeoutId = null;
+            }, 200);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [isFetching]);
+
 
     const handleSidebarToggle = () => setIsSidebarOpen(prev => !prev);
 
@@ -57,6 +104,7 @@ const Home = () => {
 
     const handleSearchClear = useCallback(() => {
         setQuery("");
+        setAllMovies([]);
     }, []);
 
     const handleGenreToggle = useCallback((genreId: number) => {
@@ -67,6 +115,7 @@ const Home = () => {
 
     const handleGenreClear = useCallback(() => {
         setSelectedGenres([]);
+        setAllMovies([]);
     }, []);
 
     const toggleFavorite = (movieId: number) => {
@@ -96,13 +145,15 @@ const Home = () => {
                 onToggleGenre={handleGenreToggle}
                 handleGenreClear={handleGenreClear}
             />
-            {
-                isLoading ? <p>Loading movies...</p> :
+            {isLoading && page === 1 ? (
+                <p>Loading movies...</p>
+            ) : (
+                <>
                     <Movies>
-                        {data?.results.length === 0 ? (
+                        {allMovies.length === 0 ? (
                             <p>No movies found.</p>
                         ) : (
-                            data?.results.map((movie: Movie) => (
+                            allMovies.map(movie => (
                                 <MovieCard
                                     key={movie.id}
                                     movie={movie}
@@ -112,7 +163,9 @@ const Home = () => {
                             ))
                         )}
                     </Movies>
-            }
+                    {isFetching && <p>Loading more...</p>}
+                </>
+            )}
         </Container>
     );
 };
