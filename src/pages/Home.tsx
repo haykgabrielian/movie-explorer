@@ -83,7 +83,7 @@ const Home = () => {
                 const windowHeight = window.innerHeight;
                 const fullHeight = document.body.offsetHeight;
 
-                if (scrollTop + windowHeight >= fullHeight - 400 && !isFetching) {
+                if (scrollTop + windowHeight >= fullHeight - 500 && !isFetching) {
                     setPage(prev => prev + 1);
                 }
 
