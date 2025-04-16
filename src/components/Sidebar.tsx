@@ -76,29 +76,33 @@ type SidebarProps = {
 const Sidebar = ({ sidebarOpen, selectedGenres, onToggleGenre, handleGenreClear }: SidebarProps) => {
     const { data, isLoading, error } = useGenres();
 
-    if (isLoading) return <p>Loading genres...</p>;
-    if (error) return <p>Error loading genres</p>;
-
     return (
         <Container sidebarOpen={sidebarOpen}>
             <h2>Filter By</h2>
-            <Section>
-                <Title>Genres</Title>
-                <Content>
-                    {data?.genres.map((genre: Genre) => {
-                        const isSelected = selectedGenres.includes(genre.id);
-                        return (
-                            <GenreItem
-                                key={genre.id}
-                                onClick={() => onToggleGenre(genre.id)}
-                                isSelected={isSelected}
-                            >
-                                {genre.name}
-                            </GenreItem>
-                        );
-                    })}
-                </Content>
-            </Section>
+            {
+                isLoading ? <p>Loading genres...</p> :
+                    <Section>
+                        {error ? <p>Error loading genres</p> :
+                            <>
+                                <Title>Genres</Title>
+                                <Content>
+                                    {data?.genres.map((genre: Genre) => {
+                                        const isSelected = selectedGenres.includes(genre.id);
+                                        return (
+                                            <GenreItem
+                                                key={genre.id}
+                                                onClick={() => onToggleGenre(genre.id)}
+                                                isSelected={isSelected}
+                                            >
+                                                {genre.name}
+                                            </GenreItem>
+                                        );
+                                    })}
+                                </Content>
+                            </>
+                        }
+                    </Section>
+            }
             {selectedGenres.length > 0 && <ClearButton onClick={handleGenreClear}>Clear Filters</ClearButton>}
         </Container>
     );

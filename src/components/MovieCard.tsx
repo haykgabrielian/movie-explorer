@@ -15,6 +15,7 @@ const MovieItem = styled.div`
 
 const Poster = styled.img`
     width: 100%;
+    min-height: 430px;
 `;
 
 const MovieInfo = styled.span<{ theme: ThemeType }>`

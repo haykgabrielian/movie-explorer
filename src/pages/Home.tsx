@@ -105,6 +105,7 @@ const Home = () => {
     const handleSearchClear = useCallback(() => {
         setQuery("");
         setAllMovies([]);
+        setPage(1);
     }, []);
 
     const handleGenreToggle = useCallback((genreId: number) => {
@@ -116,6 +117,7 @@ const Home = () => {
     const handleGenreClear = useCallback(() => {
         setSelectedGenres([]);
         setAllMovies([]);
+        setPage(1);
     }, []);
 
     const toggleFavorite = (movieId: number) => {

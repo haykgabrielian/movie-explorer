@@ -14,6 +14,14 @@ const SearchInput = styled.input`
     font-size: 16px;
     border-radius: 4px;
     border: none;
+
+    @media (max-width: 768px) {
+        width: 300px;
+    }
+    
+    @media (max-width: 440px) {
+        width: 180px;
+    }
 `;
 
 const Clear = styled.div`
